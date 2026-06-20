@@ -37,36 +37,70 @@ fun DailyBoardScreen(
     val items by viewModel.todaysBoardItems.collectAsState()
     var showAddItem by remember { mutableStateOf(false) }
 
-    Box(
-    Modifier
-        .fillMaxWidth()
-        .background(Background) {
-        if (items.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("📋", fontSize = 52.sp)
-                    Text("Nothing on the board yet", color = TextPrimary, fontSize = 17.sp, fontWeight = FontWeight.Medium)
-                    Text("Add something to do today", color = TextSecondary, fontSize = 14.sp)
-                }
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(Background)
+) {
+    if (items.isEmpty()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(items, key = { it.id }) { item ->
-                    BoardItemRow(
-                        item = item,
-                        onToggle = { viewModel.toggleDailyBoardItem(item) },
-                        onDelete = { viewModel.deleteDailyBoardItem(item) },
-                        onStartSession = { onStartStudySession(item) },
-                    )
-                }
-                item { Spacer(Modifier.height(72.dp)) } // room for the add button
+                Text("📋", fontSize = 52.sp)
+
+                Text(
+                    text = "Nothing on the board yet",
+                    color = TextPrimary,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                Text(
+                    text = "Add something to do today",
+                    color = TextSecondary,
+                    fontSize = 14.sp
+                )
             }
         }
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                horizontal = 20.dp,
+                vertical = 16.dp
+            ),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(
+                items = items,
+                key = { it.id }
+            ) { item ->
+                BoardItemRow(
+                    item = item,
+                    onToggle = {
+                        viewModel.toggleDailyBoardItem(item)
+                    },
+                    onDelete = {
+                        viewModel.deleteDailyBoardItem(item)
+                    },
+                    onStartSession = {
+                        onStartStudySession(item)
+                    }
+                )
+            }
 
+            item {
+                Spacer(
+                    modifier = Modifier.height(72.dp)
+                )
+            }
+        }
+    }
         // ── Add Item button (bottom, consistent with Manual Entry style) ────────
         Box(
             modifier = Modifier
