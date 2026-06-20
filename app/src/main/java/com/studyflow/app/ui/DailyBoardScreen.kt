@@ -37,7 +37,10 @@ fun DailyBoardScreen(
     val items by viewModel.todaysBoardItems.collectAsState()
     var showAddItem by remember { mutableStateOf(false) }
 
-    Box(Modifier.fillMaxSize().background(Background)) {
+    Box(
+    Modifier
+        .fillMaxWidth()
+        .background(Background) {
         if (items.isEmpty()) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(10.dp)) {
